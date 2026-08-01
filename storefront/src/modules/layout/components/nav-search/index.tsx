@@ -67,7 +67,7 @@ const NavSearch = () => {
                   type="search"
                   value={value}
                   onChange={onChange}
-                  className="txt-compact-small h-full flex-1 bg-transparent placeholder:text-ui-fg-muted focus:outline-none"
+                  className="txt-compact-small h-full flex-1 bg-transparent placeholder:text-ui-fg-muted focus:outline-hidden"
                 />
                 <button
                   onClick={(e) => {
