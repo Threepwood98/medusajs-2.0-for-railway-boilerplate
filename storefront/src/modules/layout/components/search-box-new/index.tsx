@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { useRouter } from "next/navigation"
 import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
 import { MagnifyingGlassMini } from "@medusajs/icons"
@@ -18,6 +17,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@lib/components/ui/popover"
+import { useState } from "react"
 
 const SearchBoxInner = ({
   open,
@@ -118,7 +118,7 @@ const SearchBoxInner = ({
 }
 
 const SearchBoxNew = () => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="hidden small:flex items-center">
