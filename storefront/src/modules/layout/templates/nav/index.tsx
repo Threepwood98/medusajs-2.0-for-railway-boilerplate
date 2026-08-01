@@ -5,7 +5,7 @@ import { StoreRegion } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
-import NavSearch from "@modules/layout/components/nav-search"
+import SearchBoxNew from "@modules/layout/components/search-box-new"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
@@ -21,7 +21,7 @@ export default async function Nav() {
           </div>
 
           <div className="flex items-center h-full">
-            <NavSearch />
+            <SearchBoxNew />
             {/* <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
