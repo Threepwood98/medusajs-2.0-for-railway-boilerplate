@@ -21,11 +21,10 @@ const SearchBoxInner = () => {
   const { hits } = useHits<ProductHit>()
 
   return (
-    <Combobox
+    <Combobox<ProductHit>
       items={hits}
-      inputValue={query}
       onInputValueChange={(value) => refine(value)}
-      itemToStringValue={(hit) => hit.title}
+      itemToStringLabel={(hit) => hit.title}
       filter={() => true}
       onValueChange={(hit) => {
         if (hit) router.push(`/products/${hit.handle}`)
@@ -63,7 +62,7 @@ const SearchBoxInner = () => {
 
 const SearchBoxNew = () => {
   return (
-    <div className="hidden small:flex items-center">
+    <div className="items-center">
       <InstantSearch indexName={SEARCH_INDEX_NAME} searchClient={searchClient}>
         <SearchBoxInner />
       </InstantSearch>
