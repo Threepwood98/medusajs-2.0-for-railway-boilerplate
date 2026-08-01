@@ -1,70 +1,129 @@
 "use client"
 
+import * as React from "react"
 import { useRouter } from "next/navigation"
 import { InstantSearch, useHits, useSearchBox } from "react-instantsearch"
+import { MagnifyingGlassMini } from "@medusajs/icons"
+
 import { SEARCH_INDEX_NAME, searchClient } from "@lib/search-client"
 import { ProductHit } from "@modules/search/components/hit"
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from "@lib/components/ui/combobox"
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+  InputGroupButton,
+} from "@lib/components/ui/input-group"
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@lib/components/ui/popover"
 
-// Este componente vive ADENTRO de <InstantSearch>, por eso puede
-// usar los hooks. No los muevas al componente padre.
-const SearchBoxInner = () => {
+const SearchBoxInner = ({
+  open,
+  setOpen,
+}: {
+  open: boolean
+  setOpen: (v: boolean) => void
+}) => {
   const router = useRouter()
   const { query, refine } = useSearchBox()
   const { hits } = useHits<ProductHit>()
 
+  const goToProduct = (handle: string) => {
+    router.push(`/products/${handle}`)
+    refine("")
+    setOpen(false)
+  }
+
+  const handleSearch = () => {
+    if (!query.trim()) return
+    router.push(`/results/${encodeURIComponent(query.trim())}`)
+    setOpen(false)
+  }
+
   return (
-    <Combobox<ProductHit>
-      items={hits}
-      onInputValueChange={(value) => refine(value)}
-      itemToStringLabel={(hit) => hit.title}
-      filter={() => true}
-      onValueChange={(hit) => {
-        if (hit) router.push(`/products/${hit.handle}`)
-      }}
-    >
-      <ComboboxInput
-        placeholder="Buscar productos..."
-        className="h-8 w-48 sm:w-64"
-        data-testid="nav-search-input"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger
+        nativeButton={false}
+        render={
+          <InputGroup className="w-48 sm:w-64">
+            <InputGroupInput
+              placeholder="Buscar productos..."
+              value={query}
+              onChange={(e) => refine(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  handleSearch()
+                }
+              }}
+              data-testid="nav-search-input"
+            />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                variant="secondary"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSearch()
+                }}
+                aria-label="Buscar"
+              >
+                <MagnifyingGlassMini />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        }
       />
-      <ComboboxContent>
-        <ComboboxEmpty>
-          {query ? "Sin resultados." : "Escribe para buscar..."}
-        </ComboboxEmpty>
-        <ComboboxList>
-          {(hit) => (
-            <ComboboxItem key={hit.id} value={hit}>
-              <div className="flex items-center gap-x-3">
+
+      <PopoverContent
+        align="start"
+        sideOffset={8}
+        className="w-48 sm:w-64 p-2 max-h-[70vh] overflow-y-auto"
+        initialFocus={false}
+      >
+        {!query && (
+          <p className="p-4 text-sm text-ui-fg-subtle">
+            Escribe para buscar...
+          </p>
+        )}
+        {query && hits.length === 0 && (
+          <p className="p-4 text-sm text-ui-fg-subtle">Sin resultados.</p>
+        )}
+        <ul className="flex flex-col">
+          {hits.map((hit) => (
+            <li key={hit.id}>
+              <button
+                type="button"
+                onClick={() => goToProduct(hit.handle)}
+                className="flex w-full items-center gap-x-3 rounded-md p-2 text-left hover:bg-accent"
+                data-testid="search-result"
+              >
                 {hit.thumbnail && (
                   <img
                     src={hit.thumbnail}
                     alt={hit.title}
-                    className="h-8 w-8 rounded object-cover"
+                    className="h-10 w-10 shrink-0 rounded object-cover"
                   />
                 )}
-                <span>{hit.title}</span>
-              </div>
-            </ComboboxItem>
-          )}
-        </ComboboxList>
-      </ComboboxContent>
-    </Combobox>
+                <span className="text-sm">{hit.title}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </PopoverContent>
+    </Popover>
   )
 }
 
 const SearchBoxNew = () => {
+  const [open, setOpen] = React.useState(false)
+
   return (
-    <div className="items-center">
+    <div className="hidden small:flex items-center">
       <InstantSearch indexName={SEARCH_INDEX_NAME} searchClient={searchClient}>
-        <SearchBoxInner />
+        <SearchBoxInner open={open} setOpen={setOpen} />
       </InstantSearch>
     </div>
   )
