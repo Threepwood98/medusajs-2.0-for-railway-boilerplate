@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 /*
@@ -30,7 +30,8 @@
   body {
     @apply bg-background text-foreground;
   }
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   html {
@@ -52,7 +53,7 @@
 }
 
 @utility content-container {
-  @apply max-w-[1440px] w-full mx-auto px-6;
+  @apply max-w-360 w-full mx-auto px-6;
 }
 
 @utility contrast-btn {
@@ -88,27 +89,27 @@
 }
 
 @utility text-xl-regular {
-  @apply text-2xl leading-[36px] font-normal;
+  @apply text-2xl leading-9 font-normal;
 }
 
 @utility text-xl-semi {
-  @apply text-2xl leading-[36px] font-semibold;
+  @apply text-2xl leading-9 font-semibold;
 }
 
 @utility text-2xl-regular {
-  @apply text-[30px] leading-[48px] font-normal;
+  @apply text-[30px] leading-12 font-normal;
 }
 
 @utility text-2xl-semi {
-  @apply text-[30px] leading-[48px] font-semibold;
+  @apply text-[30px] leading-12 font-semibold;
 }
 
 @utility text-3xl-regular {
-  @apply text-[32px] leading-[44px] font-normal;
+  @apply text-[32px] leading-11 font-normal;
 }
 
 @utility text-3xl-semi {
-  @apply text-[32px] leading-[44px] font-semibold;
+  @apply text-[32px] leading-11 font-semibold;
 }
 
 @layer utilities {
