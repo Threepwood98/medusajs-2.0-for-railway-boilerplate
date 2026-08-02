@@ -18,13 +18,17 @@ import {
   PopoverContent,
 } from "@lib/components/ui/popover"
 import { useState } from "react"
+import { SearchIcon } from "lucide-react"
+import { cn } from "@lib/lib/utils"
 
 const SearchBoxInner = ({
   open,
   setOpen,
+  classname = "",
 }: {
   open: boolean
   setOpen: (v: boolean) => void
+  classname?: string
 }) => {
   const router = useRouter()
   const { query, refine } = useSearchBox()
@@ -47,9 +51,9 @@ const SearchBoxInner = ({
       <PopoverTrigger
         nativeButton={false}
         render={
-          <InputGroup className="w-48 sm:w-64">
+          <InputGroup className={cn("w-auto", classname)}>
             <InputGroupInput
-              placeholder="Buscar productos..."
+              placeholder="Buscar..."
               value={query}
               onChange={(e) => refine(e.currentTarget.value)}
               onKeyDown={(e) => {
@@ -59,18 +63,23 @@ const SearchBoxInner = ({
                 }
               }}
               data-testid="nav-search-input"
+              className="h-full w-full"
             />
-            <InputGroupAddon align="inline-end">
+            <InputGroupAddon
+              align="inline-end"
+              className="h-full w-1/4 py-0.5 px-1.5"
+            >
               <InputGroupButton
-                variant="secondary"
+                variant="default"
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleSearch()
                 }}
                 aria-label="Buscar"
+                className="h-full w-full rounded-2xl"
               >
-                <MagnifyingGlassMini />
+                <SearchIcon className="size-1/2" />
               </InputGroupButton>
             </InputGroupAddon>
           </InputGroup>
@@ -117,15 +126,13 @@ const SearchBoxInner = ({
   )
 }
 
-const SearchBoxNew = () => {
+const SearchBoxNew = ({ classname = "" }: { classname?: string }) => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="hidden small:flex items-center">
-      <InstantSearch indexName={SEARCH_INDEX_NAME} searchClient={searchClient}>
-        <SearchBoxInner open={open} setOpen={setOpen} />
-      </InstantSearch>
-    </div>
+    <InstantSearch indexName={SEARCH_INDEX_NAME} searchClient={searchClient}>
+      <SearchBoxInner open={open} setOpen={setOpen} classname={classname} />
+    </InstantSearch>
   )
 }
 
