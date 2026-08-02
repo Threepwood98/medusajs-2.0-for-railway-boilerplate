@@ -20,6 +20,7 @@ import {
 import { useState } from "react"
 import { SearchIcon } from "lucide-react"
 import { cn } from "@lib/lib/utils"
+import { Separator } from "@lib/components/ui/separator"
 
 const SearchBoxInner = ({
   open,
@@ -79,7 +80,7 @@ const SearchBoxInner = ({
                 aria-label="Buscar"
                 className="h-full w-full rounded-2xl"
               >
-                <SearchIcon className="size-1/2" />
+                <SearchIcon className="size-auto" />
               </InputGroupButton>
             </InputGroupAddon>
           </InputGroup>
@@ -92,11 +93,6 @@ const SearchBoxInner = ({
         className="w-48 sm:w-64 p-2 max-h-[70vh] overflow-y-auto"
         initialFocus={false}
       >
-        {!query && (
-          <p className="p-4 text-sm text-ui-fg-subtle">
-            Escribe para buscar...
-          </p>
-        )}
         {query && hits.length === 0 && (
           <p className="p-4 text-sm text-ui-fg-subtle">Sin resultados.</p>
         )}

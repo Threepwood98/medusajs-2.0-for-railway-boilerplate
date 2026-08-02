@@ -6,64 +6,57 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 import SearchBoxNew from "@modules/layout/components/search-box-new"
+import { getCategoriesList } from "@lib/data/categories"
+import { clx } from "@medusajs/ui"
+import CategoryBar from "@modules/layout/components/category-bar"
+import { Avatar, AvatarFallback, AvatarImage } from "@lib/components/ui/avatar"
+import CartDrawer from "@modules/layout/components/cart-drawer"
 
 export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 py-2 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
+    <header className="sticky top-0 inset-x-0 z-50 h-24 duration-200 bg-primary-foreground shadow-md">
+      <nav className="flex flex-col content-container h-24">
+        <div className="flex h-16 py-2 items-center justify-between">
           <LocalizedClientLink
             href="/"
-            className="flex flex-1 items-center h-full"
+            className="h-full"
             data-testid="nav-store-link"
           >
             <img
-              src="/GM_LOGO_n2.webp"
+              src="/GM_LOGO_n2.1.webp"
               alt="Logo"
               className="h-full w-auto object-contain"
             />
           </LocalizedClientLink>
-          
+
           <SearchBoxNew classname="h-full" />
 
-          <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
-            <div className="hidden small:flex items-center gap-x-6 h-full">
-              {process.env.NEXT_PUBLIC_FEATURE_SEARCH_ENABLED && (
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base"
-                  href="/search"
-                  scroll={false}
-                  data-testid="nav-search-link"
-                >
-                  Search
-                </LocalizedClientLink>
-              )}
-              <LocalizedClientLink
-                className="hover:text-ui-fg-base"
-                href="/account"
-                data-testid="nav-account-link"
-              >
-                Account
-              </LocalizedClientLink>
-            </div>
-            <Suspense
-              fallback={
-                <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
-                  href="/cart"
-                  data-testid="nav-cart-link"
-                >
-                  Cart (0)
-                </LocalizedClientLink>
-              }
+          <div className="flex h-full gap-1">
+            <LocalizedClientLink
+              className="flex h-full items-center"
+              href="/account"
+              data-testid="nav-account-link"
             >
-              <CartButton />
-            </Suspense>
+              <Avatar size="lg">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </LocalizedClientLink>
+
+            <CartButton />
+
+            {/* <SideMenu regions={regions} /> */}
           </div>
-        </nav>
-      </header>
-    </div>
+        </div>
+        <div className="flex h-8 items-center">
+          <CategoryBar />
+        </div>
+      </nav>
+    </header>
   )
 }

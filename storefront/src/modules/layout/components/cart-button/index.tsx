@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import CartDropdown from "../cart-dropdown"
 import { enrichLineItems, retrieveCart } from "@lib/data/cart"
+import CartDrawer from "../cart-drawer"
 
 const fetchCart = async () => {
   const cart = await retrieveCart()
@@ -20,5 +21,5 @@ const fetchCart = async () => {
 export default async function CartButton() {
   const cart = await fetchCart()
 
-  return <CartDropdown cart={cart} />
+  return <CartDrawer cart={cart} />
 }
